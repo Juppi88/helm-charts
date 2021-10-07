@@ -4,7 +4,17 @@ This is a collection of various Helm charts used by Project Apollo Community. Th
 
 ## Usage
 
-The charts are installed using [Helm](https://helm.sh/). Instructions for setting up the repository fill follow.
+The charts are installed using [Helm](https://helm.sh/). Add the chart repository to Helm as follows:
+
+```bash
+helm repo add juppi https://juppi88.github.io/helm-charts
+```
+
+You can then see the charts in the repository by running:
+
+```bash
+helm search repo juppi
+```
 
 ## Licence
 
