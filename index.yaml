@@ -1,9 +1,27 @@
 apiVersion: v1
 entries:
+  alertmanager-irc-relay:
+  - apiVersion: v2
+    appVersion: v0.4.1
+    created: "2021-10-08T00:22:02.2362357+03:00"
+    dependencies:
+    - name: common
+      repository: https://juppi88.github.io/helm-charts
+      version: 0.0.1
+    description: Alertmanager IRC Relay
+    digest: 23c09aa1b5261e449b2d60014f5297ea3a61f0cd05c8369c29a55c4f8d4ce4d1
+    icon: https://helm.sh/img/helm.svg
+    name: alertmanager-irc-relay
+    sources:
+    - https://github.com/google/alertmanager-irc-relay
+    type: application
+    urls:
+    - https://juppi88.github.io/helm-charts/alertmanager-irc-relay-0.0.1.tgz
+    version: 0.0.1
   common:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2021-10-07T23:13:32.4761788+03:00"
+    created: "2021-10-08T00:22:02.2367652+03:00"
     description: A Library Helm chart containing shared code between application charts.
     digest: 49f658af60a29fb699af60b3cb6b12a6cbbd8f9fd6814951fea16c1dc0e8b35c
     icon: https://helm.sh/img/helm.svg
@@ -12,4 +30,23 @@ entries:
     urls:
     - https://juppi88.github.io/helm-charts/common-0.0.1.tgz
     version: 0.0.1
-generated: "2021-10-07T23:13:32.4756643+03:00"
+  inspircd:
+  - apiVersion: v2
+    appVersion: 2.0.26
+    created: "2021-10-08T00:22:02.2372943+03:00"
+    dependencies:
+    - name: common
+      repository: https://juppi88.github.io/helm-charts
+      version: 0.0.1
+    description: InspIRCd
+    digest: ccacaa98e02de5ec2fa374208143cbd4cbe35996d7d039544f91ef918137b568
+    icon: https://helm.sh/img/helm.svg
+    name: inspircd
+    sources:
+    - https://github.com/inspircd/inspircd
+    - https://github.com/inspircd/inspircd-docker
+    type: application
+    urls:
+    - https://juppi88.github.io/helm-charts/inspircd-0.0.1.tgz
+    version: 0.0.1
+generated: "2021-10-08T00:22:02.2340779+03:00"
