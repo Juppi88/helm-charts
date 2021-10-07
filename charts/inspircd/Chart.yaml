@@ -1,0 +1,14 @@
+apiVersion: v2
+name: inspircd
+description: InspIRCd
+type: application
+version: 0.0.1
+appVersion: "2.0.26"
+icon: https://helm.sh/img/helm.svg
+dependencies:
+- name: common
+  version: "0.0.1"
+  repository: "https://juppi88.github.io/helm-charts"
+sources:
+  - https://github.com/inspircd/inspircd
+  - https://github.com/inspircd/inspircd-docker

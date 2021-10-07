@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "common.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "common.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "common.selectorLabels" . | nindent 8 }}
+    spec:
+      serviceAccountName: "default" # TODO: Create serviceaccount and use it
+      securityContext:
+        fsGroup: 10000
+      containers:
+      - name: ircd
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy | default "IfNotPresent" | quote }}
+        ports:
+        - name: irc-client
+          containerPort: {{ .Values.container.ports.client }}
+          protocol: TCP
+        - name: irc-client-ssl
+          containerPort: {{ .Values.container.ports.clientSSL }}
+          protocol: TCP
+        - name: irc-server
+          containerPort: {{ .Values.container.ports.server }}
+          protocol: TCP
+        livenessProbe:
+          initialDelaySeconds: 120
+          tcpSocket:
+            port: irc-client
+        readinessProbe:
+          initialDelaySeconds: 120
+          tcpSocket:
+            port: irc-client
+        volumeMounts:
+        - name: config-volume
+          mountPath: "/inspircd/conf"
+        resources:  {{- toYaml .Values.resources | nindent 10 }}
+      volumes:
+      - name: config-volume
+        configMap:
+          name: {{ .Release.Name }}-config

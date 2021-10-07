@@ -25,4 +25,5 @@ echo -e "Building charts for release...\n"
 
 mkdir -p $builddir
 helm package --dependency-update --destination $builddir $chartdir/*
+
 echo -e "\nBuild complete."
