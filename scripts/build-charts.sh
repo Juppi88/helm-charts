@@ -1,7 +1,19 @@
 #!/bin/bash
-echo -e "Linting charts before building...\n"
+chartdir="charts"
+builddir="$PWD/.build/"
 
-helm lint --strict charts/*
+echo -e "Updating chart dependencies...\n"
+for chart in $chartdir/*/; do
+    helm dependency update "$chart"
+done
+
+if [ "$?" -ne "0" ]; then
+    echo -e "\nDependency update failed, unable to build the charts!"
+    exit 1
+fi
+
+echo -e "\nLinting charts before building...\n"
+helm lint --strict $chartdir/*
 
 if [ "$?" -ne "0" ]; then
     echo -e "\nLint failed, unable to build the charts!"
@@ -11,9 +23,6 @@ fi
 echo -e "\nLint successful."
 echo -e "Building charts for release...\n"
 
-builddir="$PWD/.build/"
 mkdir -p $builddir
-
-helm package --dependency-update --destination "$builddir" charts/*
-
+helm package --dependency-update --destination $builddir $chartdir/*
 echo -e "\nBuild complete."
