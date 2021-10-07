@@ -1,0 +1,6 @@
+dependencies:
+- name: common
+  repository: https://juppi88.github.io/helm-charts
+  version: 0.0.1
+digest: sha256:446271450ee5439e2c048dfe8ce060fdeb80ac7e8fee5c0700ddd342807c3a14
+generated: "2021-10-07T23:46:54.5903256+03:00"

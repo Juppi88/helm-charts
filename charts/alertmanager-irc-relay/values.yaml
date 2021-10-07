@@ -1,0 +1,24 @@
+# Alertmanager IRC Relay default values
+service:
+  type: ClusterIP
+  hostname: localhost
+  port: 8080
+container:
+  port: 8000
+image:
+  repository: maldridge/alertmanager-irc-relay
+  pullPolicy: IfNotPresent
+  tag: v0.4.1
+serviceAccount:
+  create: false
+  annotations: {}
+  name: "default"
+irc:
+  host: localhost
+  port: 6697
+  useSSL: yes
+  nickname: AlertManagerBot
+  realname: AlertManager Bot
+  channel:
+    name: "#Alerts"
+    password: OptionalPassword

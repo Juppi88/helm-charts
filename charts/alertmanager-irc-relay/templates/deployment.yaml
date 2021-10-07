@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "common.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "common.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "common.selectorLabels" . | nindent 8 }}
+    spec:
+      serviceAccountName: "default" # TODO: Create serviceaccount and use it
+      containers:
+      - name: relay
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy | default "IfNotPresent" | quote }}
+        command: [ "./alertmanager-irc-relay" ]
+        args: [ "--config=/config/config.yaml" ]
+        ports:
+        - name: webhook
+          containerPort: {{ .Values.container.port | default 8000 }}
+          protocol: TCP
+        # TODO: Fix probes
+        #livenessProbe:
+        #  initialDelaySeconds: 120
+        #  tcpSocket:
+        #    port: webhook
+        #readinessProbe:
+        #  initialDelaySeconds: 120
+        #  tcpSocket:
+        #    port: webhook
+        volumeMounts:
+        - name: config-volume
+          mountPath: "/config"
+      volumes:
+      - name: config-volume
+        configMap:
+          name: {{ .Release.Name }}-config

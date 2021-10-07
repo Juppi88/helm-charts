@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-config
+  namespace: {{ .Release.Namespace }}
+data:
+  config.yaml: |
+    http_host: {{ .Values.service.hostname | default "localhost" }}
+    http_port: {{ .Values.container.port | default 8000 }}
+    irc_host: {{ .Values.irc.host | default "localhost" }}
+    irc_port: {{ .Values.irc.port | default 6667 }}
+    irc_use_ssl: {{ .Values.irc.useSSL | default "no" }}
+    irc_nickname: {{ .Values.irc.nickname | default "alertmanager-irc-relay" }}
+    irc_realname: {{ .Values.irc.realname | default "Alertmanager IRC Relay" }}
+    irc_channels:
+      - name: {{ .Values.irc.channel.name | default "#Alerts" | quote }}
+        {{- if .Values.irc.channel.password }}
+        password: {{ .Values.irc.channel.password }}
+        {{- end }}
+    msg_once_per_alert_group: no
+    use_privmsg: yes
+    msg_template: {{`'[{{ if eq .Status "firing" }}{{ .Labels.severity | ToUpper }}{{ else }}RESOLVED{{ end }}] {{ .Labels.alertname }} :: {{ .Annotations.description }}'`}}
+    alert_buffer_size: 2048
+    nickserv_identify_patterns:
+      - "identify via /msg NickServ identify <password>"
+      - "type /msg NickServ IDENTIFY password"
+      - "authenticate yourself to services with the IDENTIFY command"
