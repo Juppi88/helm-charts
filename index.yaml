@@ -1,3 +1,15 @@
 apiVersion: v1
-entries: {}
-generated: "2021-10-07T22:24:45.495072+03:00"
+entries:
+  common:
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2021-10-07T23:13:32.4761788+03:00"
+    description: A Library Helm chart containing shared code between application charts.
+    digest: 49f658af60a29fb699af60b3cb6b12a6cbbd8f9fd6814951fea16c1dc0e8b35c
+    icon: https://helm.sh/img/helm.svg
+    name: common
+    type: library
+    urls:
+    - https://juppi88.github.io/helm-charts/common-0.0.1.tgz
+    version: 0.0.1
+generated: "2021-10-07T23:13:32.4756643+03:00"
