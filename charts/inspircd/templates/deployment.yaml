@@ -43,7 +43,7 @@ spec:
         volumeMounts:
         - name: config-volume
           mountPath: "/inspircd/conf"
-        resources:  {{- toYaml .Values.resources | nindent 10 }}
+        resources: {{- toYaml .Values.resources | nindent 10 }}
       volumes:
       - name: config-volume
         configMap:

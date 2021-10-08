@@ -1,0 +1,14 @@
+{{ if .Values.volume.create }}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  storageClassName: "{{ .Values.volume.className }}"
+  accessModes:
+  - "{{ .Values.volume.accessMode }}"
+  resources:
+    requests:
+      storage: "{{ required "A valid .Values.volume.size must be set!" .Values.volume.size }}"
+{{ end }}

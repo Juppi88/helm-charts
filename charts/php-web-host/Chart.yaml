@@ -1,0 +1,14 @@
+apiVersion: v2
+name: php-web-host
+description: PHP web host. Combines NGING, PHP and an SSH server into one chart.
+type: application
+version: 0.0.1
+appVersion: "0.0.1"
+icon: https://project-apollo.co.uk/favicon.ico
+dependencies:
+- name: common
+  version: "0.0.1"
+  repository: "https://juppi88.github.io/helm-charts"
+sources:
+  - https://github.com/inspircd/inspircd
+  - https://github.com/inspircd/inspircd-docker

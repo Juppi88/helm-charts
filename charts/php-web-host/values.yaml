@@ -1,0 +1,42 @@
+# PHP web host default values
+replicaCount: 1
+ingressClassName: nginx
+ingress:
+  enable: false
+  className: nginx
+  hosts:
+  - host: example.com
+    path: /(.*)
+    pathType: Prefix
+    tlsSecretName: tls-secret
+    annotations:
+      nginx.ingress.kubernetes.io/use-regex: "true"
+      nginx.ingress.kubernetes.io/rewrite-target: "/$1"
+service:
+  type: ClusterIP
+serviceAccount:
+  create: false
+  name: default
+  annotations: {}
+volume:
+  create: true
+  className: default
+  size: 100Mi
+  accessMode: ReadWriteOnce
+nginx:
+  service:
+    port: 80
+  image:
+    repository: trafex/php-nginx
+    pullPolicy: IfNotPresent
+    tag: 2.2.0
+  resources: {}
+ssh:
+  service:
+    port: 22
+  image:
+    repository: linuxserver/openssh-server
+    pullPolicy: IfNotPresent
+    tag: 2021.10.05
+  resources: {}
+  umask: 0007
