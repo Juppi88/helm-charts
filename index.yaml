@@ -3,7 +3,7 @@ entries:
   alertmanager-irc-relay:
   - apiVersion: v2
     appVersion: v0.4.1
-    created: "2021-10-08T00:22:02.2362357+03:00"
+    created: "2021-10-08T22:19:07.6060834+03:00"
     dependencies:
     - name: common
       repository: https://juppi88.github.io/helm-charts
@@ -21,7 +21,7 @@ entries:
   common:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2021-10-08T00:22:02.2367652+03:00"
+    created: "2021-10-08T22:19:07.6066408+03:00"
     description: A Library Helm chart containing shared code between application charts.
     digest: 49f658af60a29fb699af60b3cb6b12a6cbbd8f9fd6814951fea16c1dc0e8b35c
     icon: https://helm.sh/img/helm.svg
@@ -33,7 +33,7 @@ entries:
   inspircd:
   - apiVersion: v2
     appVersion: 2.0.26
-    created: "2021-10-08T00:22:02.2372943+03:00"
+    created: "2021-10-08T22:19:07.6143863+03:00"
     dependencies:
     - name: common
       repository: https://juppi88.github.io/helm-charts
@@ -49,4 +49,23 @@ entries:
     urls:
     - https://juppi88.github.io/helm-charts/inspircd-0.0.1.tgz
     version: 0.0.1
-generated: "2021-10-08T00:22:02.2340779+03:00"
+  php-web-host:
+  - apiVersion: v2
+    appVersion: 0.0.1
+    created: "2021-10-08T22:19:07.6154645+03:00"
+    dependencies:
+    - name: common
+      repository: https://juppi88.github.io/helm-charts
+      version: 0.0.1
+    description: PHP web host. Combines NGING, PHP and an SSH server into one chart.
+    digest: 1654d40d1fcb602918890b752bebbe8c0568f0dee8c33472ab29e6ec4092e480
+    icon: https://project-apollo.co.uk/favicon.ico
+    name: php-web-host
+    sources:
+    - https://github.com/inspircd/inspircd
+    - https://github.com/inspircd/inspircd-docker
+    type: application
+    urls:
+    - https://juppi88.github.io/helm-charts/php-web-host-0.0.1.tgz
+    version: 0.0.1
+generated: "2021-10-08T22:19:07.5959172+03:00"
