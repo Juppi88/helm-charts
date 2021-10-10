@@ -22,15 +22,17 @@ spec:
       - name: ircd
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy | default "IfNotPresent" | quote }}
+        command: [ "/bin/sh" ]
+        args: [ "/inspircd/kube/scripts/entrypoint.sh" ]
         ports:
         - name: irc-client
-          containerPort: {{ .Values.container.ports.client }}
+          containerPort: {{ .Values.container.ports.clients }}
           protocol: TCP
         - name: irc-client-ssl
-          containerPort: {{ .Values.container.ports.clientSSL }}
+          containerPort: {{ .Values.container.ports.clientsSSL }}
           protocol: TCP
         - name: irc-server
-          containerPort: {{ .Values.container.ports.server }}
+          containerPort: {{ .Values.container.ports.servers }}
           protocol: TCP
         livenessProbe:
           initialDelaySeconds: 120
@@ -42,9 +44,14 @@ spec:
             port: irc-client
         volumeMounts:
         - name: config-volume
-          mountPath: "/inspircd/conf"
+          mountPath: "/inspircd/kube/conf"
+        - name: scripts-volume
+          mountPath: "/inspircd/kube/scripts"
         resources: {{- toYaml .Values.resources | nindent 10 }}
       volumes:
       - name: config-volume
         configMap:
           name: {{ .Release.Name }}-config
+      - name: scripts-volume
+        configMap:
+          name: {{ .Release.Name }}-scripts

@@ -2,14 +2,14 @@
 service:
   type: ClusterIP
   ports:
-    client: 6667
-    clientSSL: 6697
-    server: 7000
+    clients: 6667
+    clientsSSL: 6697
+    servers: 7000
 container:
   ports:
-    client: 6667
-    clientSSL: 6697
-    server: 7000
+    clients: 6667
+    clientsSSL: 6697
+    servers: 7000
 image:
   repository: inspircd/inspircd-docker
   pullPolicy: IfNotPresent

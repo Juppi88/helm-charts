@@ -12,25 +12,25 @@ spec:
   {{ end }}
   ports:
     - name: irc-client
-      port: {{ required "A valid .Values.service.ports.client" .Values.service.ports.client }}
+      port: {{ required "A valid .Values.service.ports.clients is required" .Values.service.ports.clients }}
       targetPort: irc-client
       protocol: TCP
       {{ if eq .Values.service.type "NodePort" }}
-      nodePort: {{ .Values.service.ports.client }}
+      nodePort: {{ .Values.service.ports.clients }}
       {{ end }}
     - name: irc-client-ssl
-      port: {{ required "A valid .Values.service.ports.clientSSL" .Values.service.ports.clientSSL }}
+      port: {{ required "A valid .Values.service.ports.clientsSSL is required" .Values.service.ports.clientsSSL }}
       targetPort: irc-client-ssl
       protocol: TCP
       {{ if eq .Values.service.type "NodePort" }}
-      nodePort: {{ .Values.service.ports.clientSSL }}
+      nodePort: {{ .Values.service.ports.clientsSSL }}
       {{ end }}
     - name: irc-server
-      port: {{ required "A valid .Values.service.ports.server" .Values.service.ports.server }}
+      port: {{ required "A valid .Values.service.ports.servers is required" .Values.service.ports.servers }}
       targetPort: irc-server
       protocol: TCP
       {{ if eq .Values.service.type "NodePort" }}
-      nodePort: {{ .Values.service.ports.server }}
+      nodePort: {{ .Values.service.ports.servers }}
       {{ end }}
   selector:
     {{- include "common.selectorLabels" . | nindent 4 }}

@@ -2,7 +2,7 @@ apiVersion: v2
 name: inspircd
 description: InspIRCd
 type: application
-version: 0.0.1
+version: 0.0.2
 appVersion: "2.0.26"
 icon: https://helm.sh/img/helm.svg
 dependencies:

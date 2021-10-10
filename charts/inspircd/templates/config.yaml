@@ -4,6 +4,152 @@ metadata:
   name: {{ .Release.Name }}-config
   namespace: {{ .Release.Namespace }}
 data:
-  config.conf: '
-<files motd="/inspircd/conf/motd">'
-  motd: '{{ .Values.server.motd }}'
+  inspircd.conf: '
+<server
+  name={{ .Values.inspircd.server.name | quote }}
+  description={{ .Values.inspircd.server.description | quote }}
+  network={{ .Values.inspircd.server.network | quote }}>
+
+<admin
+  name={{ .Values.inspircd.admin.name | quote }}
+  nick={{ .Values.inspircd.admin.nick | quote }}
+  email={{ .Values.inspircd.admin.email | quote }}>
+
+<bind port={{ .Values.service.ports.clients | default 6667 | quote }} type="clients">
+<bind port={{ .Values.service.ports.clientsSSL | default 6697 | quote }} type="clients" ssl="gnutls">
+<bind port={{ .Values.service.ports.servers | default 7000 | quote }} type="servers" ssl="gnutls">
+
+<power
+  hash={{ .Values.inspircd.power.hash | default "sha256" | quote }}
+  diepass={{ .Values.inspircd.power.diepass | quote }}
+  restartpass={{ .Values.inspircd.power.restartpass | quote }}>
+
+<connect
+  name="main"
+  allow="*"
+  timeout="10"
+  pingfreq="120"
+  hardsendq="1048576"
+  softsendq="8192"
+  recvq="8192"
+  threshold="20"
+  commandrate="1000"
+  fakelag="on"
+  localmax="5"
+  globalmax="5"
+  useident="no"
+  limit="5000"
+  modes="+x">
+
+<connect
+  name="spamexempt"
+  timeout="10"
+  pingfreq="120"
+  hardsendq="1048576"
+  softsendq="8192"
+  recvq="81920"
+  threshold="1000"
+  commandrate="50000"
+  fakelag="off"
+  modes="+x">
+
+<options
+  prefixquit="Quit: "
+  prefixpart="&quot;"
+  suffixpart="&quot;"
+  hostintopic="yes"
+  defaultmodes="nt"
+  xlinemessage="You have been terminated."
+  exemptchanops="nonick:v flood:o">
+
+<security
+  hideserver={{ .Values.inspircd.security.hideserver | default "" | quote }}
+  userstats="Pu">
+
+<limits
+  maxnick="31"
+  maxchan="64"
+  maxmodes="20"
+  maxident="11"
+  maxquit="255"
+  maxtopic="307"
+  maxkick="255"
+  maxgecos="128"
+  maxaway="200">
+
+<whowas
+  groupsize="10"
+  maxgroups="100000"
+  maxkeep="3d">
+
+<badnick nick="ChanServ" reason="Reserved For Services">
+<badnick nick="NickServ" reason="Reserved For Services">
+<badnick nick="OperServ" reason="Reserved For Services">
+<badnick nick="MemoServ" reason="Reserved For Services">
+
+<badhost host="root@*" reason="Do not IRC as root!">
+
+<include file="conf/connectionlimits.conf">
+<include file="conf/opers.conf">
+
+<files
+  motd="/inspircd/conf/inspircd.motd"
+  rules="/inspircd/conf/inspircd.rules">
+'
+
+  {{ if .Values.inspircd.motd }}
+  inspircd.motd.b64: {{ .Values.inspircd.motd | b64enc | quote }}
+  {{ else if .Values.inspircd.motdBase64 }}
+  inspircd.motd.b64: {{ .Values.inspircd.motdBase64 | quote }}
+  {{ end }}
+
+  {{ if .Values.inspircd.rules }}
+  inspircd.rules.b64: {{ .Values.inspircd.rules | b64enc | quote }}
+  {{ else if .Values.inspircd.rulesBase64 }}
+  inspircd.rules.b64: {{ .Values.inspircd.rulesBase64 | quote }}
+  {{ end }}
+
+  connectionlimits.conf: '
+    {{- range .Values.inspircd.connectionLimits }}
+    <connect
+      name={{ .name | quote }}
+      allow={{ .allow | quote }}
+      parent={{ .parentClass | default "main" | quote }}
+      localmax={{ .limit | quote }}
+      globalmax={{ .limit | quote }}
+      limit={{ .limit | quote }}
+      modes={{ .modes | default "+x" | quote }}>
+    {{- end }}
+  '
+  opers.conf: '
+    <class
+      name="Shutdown"
+      commands="DIE RESTART REHASH LOADMODULE UNLOADMODULE RELOADMODULE RELOAD GUNLOADMODULE GRELOADMODULE SAQUIT"
+      privs="users/auspex channels/auspex servers/auspex users/mass-message channels/high-join-limit channels/set-permanent users/flood/no-throttle users/flood/increased-buffers"
+      usermodes="*"
+      chanmodes="*">
+    <class name="ServerLink" commands="CONNECT SQUIT CONNECT MKPASSWD ALLTIME SWHOIS CLOSE JUMPSERVER LOCKSERV" usermodes="*" chanmodes="*" privs="servers/auspex">
+    <class name="BanControl" commands="KILL GLINE KLINE ZLINE QLINE ELINE TLINE RLINE CHECK NICKLOCK SHUN CLONES CBAN" usermodes="*" chanmodes="*">
+    <class name="OperChat" commands="WALLOPS GLOBOPS SETIDLE" usermodes="*" chanmodes="*" privs="users/mass-message">
+    <class name="HostCloak" commands="SETHOST SETIDENT SETNAME CHGHOST CHGIDENT TAXONOMY" usermodes="*" chanmodes="*" privs="users/auspex">
+    <class name="SuperOper" commands="SAJOIN SAKICK SAMODE SANICK SAPART SATOPIC CLOSE">
+    <class name="Standard" command="USERIP">
+    <type
+      name="NetAdmin"
+      classes="OperChat BanControl HostCloak Shutdown ServerLink SuperOper Standard"
+      modes="+s +cCqQ">
+    <type
+      name="GlobalOp"
+      classes="OperChat BanControl HostCloak ServerLink SuperOper Standard">
+    <type
+      name="Helper"
+      classes="HostCloak Standard">
+    {{- range .Values.inspircd.opers }}
+    <oper
+      name={{ .name | quote }}
+      type={{ .type | quote }}
+      password={{ .password | quote }}
+      hash={{ .hash | default "hmac-sha256" | quote }}
+      host={{ .host | default "*" | quote }}>
+    {{- end }}
+  '
